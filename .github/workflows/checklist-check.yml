@@ -22,7 +22,7 @@ jobs:
           PR_BODY=$(curl -s https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} | jq -r .body)
 
           # Check for incomplete checklist items
-          if echo "$PR_BODY" | grep -q "\- \[ \]"; then
+          if echo "$PR_BODY" | grep -q "\- \[x\]"; then
             echo "Error: Not all checklist items are completed."
             exit 1
           else
