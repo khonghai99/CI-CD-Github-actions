@@ -2,21 +2,22 @@ name: Enforce Checklist Completion
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, edited]
+    types: [opened, edited]
 
 jobs:
   checklist:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository code so we can interact with the PR.
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      # Step 2: Check the PR description for the checklist.
+      - name: Install jq
+        run: sudo apt-get install jq
+
       - name: Check Checklist Completion
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Automatically provided by GitHub Actions
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           # Fetch the pull request body using the GitHub API
           PR_BODY=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
