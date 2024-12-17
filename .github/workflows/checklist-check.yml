@@ -1,0 +1,35 @@
+name: Enforce Checklist Completion
+
+# The workflow is triggered by pull request events.
+# It will run when the PR is opened, synchronized (new commits pushed), or reopened.
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  checklist:
+    # This job runs on the latest Ubuntu runner.
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository code so we can interact with the PR.
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      # Step 2: Check the PR description for the checklist.
+      # We fetch the PR body using GitHub's REST API and parse it with jq.
+      - name: Check Checklist
+        run: |
+          # Fetch the body of the PR using GitHub's API
+          PR_BODY=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .body)
+          
+          # Check if all checklist items are marked as completed ([x])
+          # You can customize the checklist items here based on your template.
+          if [[ ! "$PR_BODY" =~ "- \[x\] Item 1" ]] || [[ ! "$PR_BODY" =~ "- \[x\] Item 2" ]] || [[ ! "$PR_BODY" =~ "- \[x\] Item 3" ]]; then
+            # If any of the items are not checked, output an error message.
+            echo "Error: Not all checklist items are completed."
+            exit 1  # Fail the action, blocking the merge.
+          fi
+
+          # If all checklist items are completed, the action passes.
+          echo "All checklist items are completed."
