@@ -25,10 +25,10 @@ jobs:
           
           # Check if all checklist items are marked as completed ([x])
           # You can customize the checklist items here based on your template.
-          if [[ ! "$PR_BODY" =~ "- \[x\] Item 1" ]] || [[ ! "$PR_BODY" =~ "- \[x\] Item 2" ]] || [[ ! "$PR_BODY" =~ "- \[x\] Item 3" ]]; then
+          if [[ ! "$PR_BODY" =~ "- \[x\] Verify tests" ]] || [[ ! "$PR_BODY" =~ "- \[x\] Review code" ]] || [[ ! "$PR_BODY" =~ "- \[x\] Update documentation" ]]; then
             # If any of the items are not checked, output an error message.
             echo "Error: Not all checklist items are completed."
-            exit 1  # Fail the action, blocking the merge.
+            exit 1
           fi
 
           # If all checklist items are completed, the action passes.
