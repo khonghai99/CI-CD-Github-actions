@@ -21,7 +21,7 @@ jobs:
       - name: Check Checklist
         run: |
           # Fetch the pull request body
-          PR_BODY=$(curl -s "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .body)
+          PR_BODY=$(curl -s "https://github.com/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}" | jq -r .body)
           echo "$PR_BODY"
           # Check for incomplete checklist items
           if echo "$PR_BODY" | grep -q "\- \[ \]"; then
